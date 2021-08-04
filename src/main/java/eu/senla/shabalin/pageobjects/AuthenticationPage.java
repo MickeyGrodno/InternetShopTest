@@ -8,8 +8,8 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.url;
 
 public class AuthenticationPage implements PageObject{
-    protected static String authenticationFailedUrl = "http://automationpractice.com/index.php?controller=authentication";
-    protected static String accountPage = "http://automationpractice.com/index.php?controller=my-account";
+    protected static String authenticationFailedUrl = "index.php?controller=authentication";
+    protected static String accountPage = "index.php?controller=my-account";
     private SelenideElement alreadyRegisteredEmailField = $("#login_form #email");
     private SelenideElement alreadyRegisteredPasswordField = $("#login_form #passwd");
     private SelenideElement alreadyRegisteredSignInButton = $(By.id("SubmitLogin"));
@@ -19,9 +19,9 @@ public class AuthenticationPage implements PageObject{
         alreadyRegisteredEmailField.sendKeys(email);
         alreadyRegisteredPasswordField.sendKeys(password);
         alreadyRegisteredSignInButton.click();
-        if (url().equals(authenticationFailedUrl)) {
+        if (url().contains(authenticationFailedUrl)) {
             return this;
-        } else if(url().equals(accountPage)){
+        } else if(url().contains(accountPage)){
             return new MyAccountPage();
         } else {
             return new CreateOrderPage();

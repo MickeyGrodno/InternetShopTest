@@ -37,11 +37,12 @@ public class CreateOrderPage implements PageObject{
     private String getOrderCodeFromString(String lineWithOrderCode) {
         Pattern p = Pattern.compile("([A-Z]{8,10})");
         Matcher matcher = p.matcher(lineWithOrderCode);
-        if (matcher.matches()) {
+        if (matcher.find()) {
             return matcher.group(1);
         } else {
             return null;
         }
+
     }
 
     public String createOrder() {

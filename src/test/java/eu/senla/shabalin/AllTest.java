@@ -17,7 +17,7 @@ public class AllTest extends DataFixture{
     }
 
     @Test
-    public void loginWithIncorrectEmailAndCorrectPasswordTest() {
+    public void loginWithCorrectEmailAndIncorrectPasswordTest() {
         AuthenticationPage authenticationPage = (AuthenticationPage) topMenuBar.clickInSingInButton().authenticationWithCredetials(correctEmail, incorrectPassword);
         assertTrue(authenticationPage.isAuthenticationFailedAlertPresent());
     }

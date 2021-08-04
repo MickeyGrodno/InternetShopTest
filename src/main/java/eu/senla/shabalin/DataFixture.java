@@ -3,6 +3,7 @@ package eu.senla.shabalin;
 import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -15,7 +16,6 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class DataFixture {
     protected static String correctEmail;
-    protected static String incorrectEmail;
     protected static String correctPassword;
     protected static String incorrectPassword;
     protected static String baseUrl;
@@ -41,7 +41,7 @@ public class DataFixture {
             System.err.println("Property file not found!");
             e.printStackTrace();
         }
-
+//        Configuration.headless = true;
         Configuration.timeout = 8000;
     }
 
@@ -51,5 +51,10 @@ public class DataFixture {
         while(!title().equals("My Store")) {
             refresh();
         }
+    }
+
+    @AfterEach
+    public void afterTest() {
+        closeWindow();
     }
 }

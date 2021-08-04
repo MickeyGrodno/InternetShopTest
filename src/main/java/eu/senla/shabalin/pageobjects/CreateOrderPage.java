@@ -1,8 +1,6 @@
 package eu.senla.shabalin.pageobjects;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.selector.WithText;
 import org.openqa.selenium.By;
 
 import java.util.regex.Matcher;

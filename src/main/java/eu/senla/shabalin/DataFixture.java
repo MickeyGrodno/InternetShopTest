@@ -1,20 +1,12 @@
 package eu.senla.shabalin;
 
-import com.codeborne.selenide.Browser;
 import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.junit.jupiter.params.provider.Arguments;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.stream.Stream;

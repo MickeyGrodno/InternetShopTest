@@ -8,8 +8,8 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.url;
 
 public class AuthenticationPage implements PageObject{
-    protected static String authenticationFailedUrl = "index.php?controller=authentication";
-    protected static String accountPage = "index.php?controller=my-account";
+    protected String authenticationFailedUrl = "index.php?controller=authentication";
+    protected String accountPage = "index.php?controller=my-account";
     private SelenideElement alreadyRegisteredEmailField = $("#login_form #email");
     private SelenideElement alreadyRegisteredPasswordField = $("#login_form #passwd");
     private SelenideElement alreadyRegisteredSignInButton = $(By.id("SubmitLogin"));

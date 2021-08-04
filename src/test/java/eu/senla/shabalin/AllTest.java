@@ -2,9 +2,10 @@ package eu.senla.shabalin;
 
 import com.codeborne.selenide.ElementsCollection;
 import eu.senla.shabalin.pageobjects.*;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,42 +14,56 @@ public class AllTest extends DataFixture{
     private String myAccountPageUrl = "index.php?controller=my-account";
     private TopMenuBar topMenuBar = new TopMenuBar();;
 
-    @Test
-    public void loginWithCorrectEmailAndCorrectPasswordTest() {
+    @ParameterizedTest
+    @MethodSource("browserArguments")
+    public void loginWithCorrectEmailAndCorrectPasswordTest(String browser, String version) {
+        setCapabilitiesByArguments(browser, version);
         MyAccountPage myAccountPage = (MyAccountPage) topMenuBar.clickInSingInButton().authenticationWithCredetials(correctEmail, correctPassword);
         assertEquals(baseUrl+myAccountPageUrl, myAccountPage.getPageUrl());
     }
 
-    @Test
-    public void loginWithCorrectEmailAndIncorrectPasswordTest() {
+    @ParameterizedTest
+    @MethodSource("browserArguments")
+    public void loginWithCorrectEmailAndIncorrectPasswordTest(String browser, String version) {
+        setCapabilitiesByArguments(browser, version);
         AuthenticationPage authenticationPage = (AuthenticationPage) topMenuBar.clickInSingInButton().authenticationWithCredetials(correctEmail, incorrectPassword);
         assertTrue(authenticationPage.isAuthenticationFailedAlertPresent());
     }
 
-    @Test
-    public void isWomenCategorySubmenuDisplayedTest() {
+    @ParameterizedTest
+    @MethodSource("browserArguments")
+    public void isWomenCategorySubmenuDisplayedTest(String browser, String version) {
+        setCapabilitiesByArguments(browser, version);
         assertTrue(topMenuBar.isWomenCategorySubmenuDisplayed());
     }
 
-    @Test
-    public void isDressesCategorySubmenuDisplayedTest() {
+    @ParameterizedTest
+    @MethodSource("browserArguments")
+    public void isDressesCategorySubmenuDisplayedTest(String browser, String version) {
+        setCapabilitiesByArguments(browser, version);
         assertTrue(topMenuBar.isDressesCategorySubmenuDisplayed());
     }
 
-    @Test
-    public void searchProductPositiveTest() {
+    @ParameterizedTest
+    @MethodSource("browserArguments")
+    public void searchProductPositiveTest(String browser, String version) {
+        setCapabilitiesByArguments(browser, version);
         ElementsCollection collection = topMenuBar.searchForProductsByRequest("T-shirt").getAllProductsInPage();
         assertTrue(collection.size()>0);
     }
 
-    @Test
-    public void searchProductNegativeTest() {
+    @ParameterizedTest
+    @MethodSource("browserArguments")
+    public void searchProductNegativeTest(String browser, String version) {
+        setCapabilitiesByArguments(browser, version);
         ElementsCollection collection = topMenuBar.searchForProductsByRequest("pants").getAllProductsInPage();
         assertFalse(collection.size()>0);
     }
 
-    @Test
-    public void itemsWereAddedToTheCartTest() {
+    @ParameterizedTest
+    @MethodSource("browserArguments")
+    public void itemsWereAddedToTheCartTest(String browser, String version) {
+        setCapabilitiesByArguments(browser, version);
         int allProductsInPage = topMenuBar.chooseSummerDressesMenuCategoryAcrossDressesButton()
                 .addAllProductsInCart()
                 .getAllProductsInPage()
@@ -57,8 +72,10 @@ public class AllTest extends DataFixture{
         assertEquals(allProductsInPage, allProductsInCart);
     }
 
-    @Test
-    public void productsTotalSumAndTotalPriceCheckTest() {
+    @ParameterizedTest
+    @MethodSource("browserArguments")
+    public void productsTotalSumAndTotalPriceCheckTest(String browser, String version) {
+        setCapabilitiesByArguments(browser, version);
         topMenuBar.chooseSummerDressesMenuCategoryAcrossWomenButton().addAllProductsInCart();
         topMenuBar.clickToCartButton();
         CartPage cartPage = new CartPage();
@@ -68,16 +85,20 @@ public class AllTest extends DataFixture{
         assertEquals(sum, total);
     }
 
-    @Test
-    public void deleteAllProductsFromCart() {
+    @ParameterizedTest
+    @MethodSource("browserArguments")
+    public void deleteAllProductsFromCart(String browser, String version) {
+        setCapabilitiesByArguments(browser, version);
         topMenuBar.chooseSummerDressesMenuCategoryAcrossWomenButton().addAllProductsInCart();
         CartPage cartPage = topMenuBar.clickToCartButton().deleteAllProducts();
         cartPage.deleteAllProducts();
         assertEquals(0, cartPage.getCartItemsCount());
     }
 
-    @Test
-    public void createOrderAndCheckOrderCode() {
+    @ParameterizedTest
+    @MethodSource("browserArguments")
+    public void createOrderAndCheckOrderCode(String browser, String version) {
+        setCapabilitiesByArguments(browser, version);
         topMenuBar.chooseSummerDressesMenuCategoryAcrossWomenButton().addAllProductsInCart();
         CreateOrderPage createOrderPage = (CreateOrderPage) topMenuBar.clickToCartButton()
                 .clickProceedToCheckoutButton()

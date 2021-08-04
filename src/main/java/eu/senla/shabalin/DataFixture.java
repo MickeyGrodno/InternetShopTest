@@ -41,7 +41,7 @@ public class DataFixture {
             System.err.println("Property file not found!");
             e.printStackTrace();
         }
-//        Configuration.headless = true;
+        Configuration.headless = true;
         Configuration.timeout = 8000;
     }
 

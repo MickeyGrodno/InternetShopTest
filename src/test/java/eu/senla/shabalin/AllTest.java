@@ -3,9 +3,12 @@ package eu.senla.shabalin;
 import com.codeborne.selenide.ElementsCollection;
 import eu.senla.shabalin.pageobjects.*;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Execution(ExecutionMode.CONCURRENT)
 public class AllTest extends DataFixture{
     private String myAccountPageUrl = "index.php?controller=my-account";
     private TopMenuBar topMenuBar = new TopMenuBar();;

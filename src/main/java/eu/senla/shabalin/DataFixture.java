@@ -1,18 +1,17 @@
 package eu.senla.shabalin;
 
 import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.params.provider.Arguments;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeTest;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.stream.Stream;
 
 import static com.codeborne.selenide.Selenide.*;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 public class DataFixture {
     protected static String correctEmail;
@@ -22,7 +21,7 @@ public class DataFixture {
     protected static String authenticationFailedUrl = "http://automationpractice.com/index.php?controller=authentication";
     protected static String accountPage = "http://automationpractice.com/index.php?controller=my-account";
 
-    @BeforeAll
+    @BeforeSuite
     public static void beforeAllTest() {
         String propertyFileDirectory;
         if (System.getProperty("os.name").equals("Linux")) {
@@ -43,33 +42,26 @@ public class DataFixture {
         }
 //        Configuration.headless = true;
         Configuration.timeout = 8000;
-
-        Configuration.remote = "http://localhost:4444/wd/hub/";
+//        Configuration.remote = "http://localhost:4444/wd/hub/";
         Configuration.browserSize = "1920x1080";
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+        capabilities.setCapability("browserName", "chrome");
+        capabilities.setCapability("browserVersion", "91");
+        capabilities.setCapability("enableVNC", true);
+        Configuration.browser = "chrome";
+        Configuration.browserCapabilities = capabilities;
 
     }
 
-    public void setCapabilitiesByArguments(String browserName, String browserVersion) {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("browserName", browserName);
-        capabilities.setCapability("browserVersion", browserVersion);
-        capabilities.setCapability("enableVNC", true);
-        Configuration.browser = browserName;
-        Configuration.browserCapabilities = capabilities;
+    @BeforeMethod
+    public void setCapabilitiesByArguments() {
         open(baseUrl);
         while(!title().equals("My Store")) {
             refresh();
         }
     }
 
-    static Stream<Arguments> browserArguments() {
-        return Stream.of(
-                arguments("chrome", "91.0"),
-                arguments("firefox", "90.0")
-        );
-    }
-
-    @AfterEach
+    @AfterMethod
     public void afterTest() {
         closeWindow();
     }

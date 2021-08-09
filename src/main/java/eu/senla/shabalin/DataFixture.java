@@ -7,7 +7,11 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
 import java.util.stream.Stream;
 
@@ -15,6 +19,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 public class DataFixture {
+    protected static String propertyFileDirectory;
     protected static String correctEmail;
     protected static String correctPassword;
     protected static String incorrectPassword;
@@ -24,29 +29,27 @@ public class DataFixture {
 
     @BeforeAll
     public static void beforeAllTest() {
-        String propertyFileDirectory;
         if (System.getProperty("os.name").equals("Linux")) {
-            propertyFileDirectory = "src/main/resources/testdata.properties";
+            propertyFileDirectory = "src/main/resources/";
         } else {
-            propertyFileDirectory = "src\\main\\resources\\testdata.properties";
+            propertyFileDirectory = "src\\main\\resources\\";
         }
         Properties properties = new Properties();
-        try {
-            properties.load(new FileInputStream(propertyFileDirectory));
-            correctEmail = properties.getProperty("correctEmail");
-            correctPassword = properties.getProperty("correctPassword");
-            incorrectPassword = properties.getProperty("incorrectPassword");
-            baseUrl = properties.getProperty("baseUrl");
+        try(FileInputStream fis = new FileInputStream(propertyFileDirectory+"testdata.properties")) {
+            properties.load(fis);
         } catch (IOException e) {
             System.err.println("Property file not found!");
             e.printStackTrace();
         }
-//        Configuration.headless = true;
-        Configuration.timeout = 8000;
+        correctEmail = properties.getProperty("correctEmail");
+        correctPassword = properties.getProperty("correctPassword");
+        incorrectPassword = properties.getProperty("incorrectPassword");
+        baseUrl = properties.getProperty("baseUrl");
 
+        Configuration.headless = true;
+        Configuration.timeout = 8000;
         Configuration.remote = "http://localhost:4444/wd/hub/";
         Configuration.browserSize = "1920x1080";
-
     }
 
     public void setCapabilitiesByArguments(String browserName, String browserVersion) {
@@ -63,10 +66,15 @@ public class DataFixture {
     }
 
     static Stream<Arguments> browserArguments() {
-        return Stream.of(
-                arguments("chrome", "91.0"),
-                arguments("firefox", "90.0")
-        );
+        Properties properties = new Properties();
+        try(FileInputStream fis = new FileInputStream(propertyFileDirectory+"browsers.properties")) {
+            properties.load(fis);
+        } catch (IOException e) {
+            System.err.println("Property file not found!");
+            e.printStackTrace();
+        }
+
+        return properties.entrySet().stream().map((entry -> arguments(entry.getKey(), entry.getValue())));
     }
 
     @AfterEach
